@@ -6,55 +6,36 @@ import java.util.Scanner;
 
 public class Main {
     static Scanner scanner;
-    static char[][] field;
-    static final int FIELD_SIZE =3;
-    static final char EMPTY_CELL = '*';
-    static final char X_CELL = 'x';
-    static final char O_CELL = '0';
+    static char [][] field;
+    static final int FIELD__SIZE = 3;
+    static final char EMPTY__FIELD = '*';
+    static final char X__CELL = 'X';
+    static final char O__CELL = 'O';
+
     public static void main(String[] args) {
-        initField();
-        printField();
-        humanTurn();
-        printField();
-
-    }
-    public static boolean isCellEmpty(int x, int y) {
-    if(x < 0 || y < 0 || x >= FIELD_SIZE || y >= FIELD_SIZE){
-        return false;
-    }
-    }
-    public static void humanTurn() {
-        System.out.println("Оберіть клітинку за координатами x,y");
-        int x, y;
-        x = scanner.nextInt() - 1;
-        y = scanner.nextInt() - 1;
-        field[x][y] = X_CELL;
-    }
-    public static void printField(){
-        for (int i = 0; i <= FIELD_SIZE ; i++) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            System.out.print((i +1 ) + " ");
-
-            for (int j = 0; j < FIELD_SIZE; j++) {
-                System.out.print(field[i][j] + " ");
+        Map.initField();
+        Map.printField();
+        while (true) {
+            Player.humanTurn();
+            Map.printField();
+            if(Validate.checkWin(X__CELL)){
+                System.out.println("Гру завершено, гравець переміг");
+                break;
             }
-            System.out.println();
-        }
-        System.out.println();
-    }
-    public static void initField () {
-        field = new char[FIELD_SIZE][FIELD_SIZE];
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE ; j++) {
-                field [i][j] = EMPTY_CELL;
+            if(Validate.checkDraft()){
+                System.out.println("Гру завершено. Нічия");
+                break;
             }
-
+            Main.field[AI.aiTurn() / FIELD__SIZE][AI.aiTurn() % FIELD__SIZE] = O__CELL;
+            Map.printField();
+            if(Validate.checkWin(O__CELL)){
+                System.out.println("Гру завершено, компютер переміг");
+                break;
+            }
+            if(Validate.checkDraft()){
+                System.out.println("Гру завершено. Нічия");
+                break;
+            }
         }
-        scanner = new Scanner(System.in);
     }
 }
-
-
